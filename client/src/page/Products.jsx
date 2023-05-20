@@ -38,7 +38,7 @@ const Products = () => {
 
         // const res = await axios.get('http://localhost:8000/getdataall')
         const res = await axios.get('https://fakestoreapi.com/products')
-        console.log(res)
+        console.log("products in client", res)
         // res.data.map(async (prod)=>{
         //     await axios.post('http://localhost:8000/addProductsApi', prod)
         // })
@@ -46,11 +46,12 @@ const Products = () => {
     }
     useEffect(() => {
         getData()
+        console.log("getData :: ", getData)
     }, [])
 
     const sortData = async (sort) => {
-        // const res = await axios.get(`http://localhost:8000/sort/${sort}`)
-        const res = await axios.get('https://fakestoreapi.com/users?limit={sort}')
+        const res = await axios.get(`http://localhost:8000/sort/${sort}`)
+        // const res = await axios.get(`https://fakestoreapi.com/users?limit=${sort}`)
         setGetdata(res.data)
     }
     const sortHandel = (e) => {

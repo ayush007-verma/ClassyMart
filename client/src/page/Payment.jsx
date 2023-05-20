@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState, useRef } from 'react'
 import { NavLink, useHistory } from 'react-router-dom'
 import { DataContext } from '../context/DataContext'
 import axios from 'axios'
+import { paymentSuccess } from '../component/Toastify'
+import { ToastContainer } from 'react-toastify'
 const Payment = () => {
     const his = useHistory()
     const datemail = localStorage.getItem('EcomEmail')
@@ -37,16 +39,16 @@ const Payment = () => {
 
     }
 
-        // useEffect(() => {
-        //     timeout.current = setTimeout(checkAuth, 1000)
-        //     return function () {
-        //         if (timeout.current) {
-        //             clearTimeout(timeout.current)
-        //         }
-        //     }
+    // useEffect(() => {
+    //     timeout.current = setTimeout(checkAuth, 1000)
+    //     return function () {
+    //         if (timeout.current) {
+    //             clearTimeout(timeout.current)
+    //         }
+    //     }
 
 
-        // }, [])
+    // }, [])
 
 
     useEffect(() => {
@@ -127,20 +129,22 @@ const Payment = () => {
 
         console.log('buy now req data :- ', data)
         // console.log(data)
+        try {
+            const res = await axios.post(`http://localhost:8000/buynow`, data)
+            console.log("payment : ", res)
+            // setCart([])
 
-        const res = await axios.post(`http://localhost:8000/buynow`, data)
-        //   console.log(res.data.payment_request.longurl)
-
-        if (res.data.success) {
-            setCart([])
-            localStorage.setItem('Ecomlongid', res.data.payment_request.id)
-
-            his.push(`/myaccount`)
-        } else {
-            console.log("order not placed")
+            setTimeout(() => {
+                paymentSuccess()
+                setCart([])
+                his.push('/home')
+            }, 2000);
+        } catch (err) {
+            console.log("order not placed", err)
         }
-        window.open(res.data.payment_request.longurl, '_self')
-        //   window.close('http://localhost:3000/payment')
+        paymentSuccess()
+
+
     }
 
     useEffect(() => {
@@ -257,9 +261,6 @@ const Payment = () => {
 
                                                     <textarea name="address" id="" class="form-control" rows="3" placeholder="Enter Full Address" value={addr} onChange={(e) => setAddr(e.target.value)} required></textarea>
                                                 </div>
-
-
-
                                                 <div class="text-center mb-5">
                                                     <input type="submit" class="btn btn-info pt-2 pb-2 pl-5 pr-5" value="Add Address" />
                                                 </div>
@@ -278,7 +279,7 @@ const Payment = () => {
                                 {
                                     yourAddress.length ? (
                                         <>
-                                            <form onSubmit={OnBuyNow}>
+                                            <form onSubmit={OnBuyNow} >
 
                                                 {
                                                     yourAddress.map((val, ind) => {
@@ -316,6 +317,9 @@ const Payment = () => {
 
                                                 <div class="text-center m-3">
                                                     <input type="submit" class="btn btn-info pt-2 pb-2 pl-5 pr-5" value="Buy Now" />
+                                                    {
+                                                        <ToastContainer />
+                                                    }
                                                 </div>
 
 

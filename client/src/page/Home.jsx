@@ -51,7 +51,7 @@ const Home = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-md-6 col-12 mb-3 mx-auto">
-                        <h1>Welcome to <span>GreenX World</span> </h1>
+                        <h1>Welcome to <span>ClassyMart</span> </h1>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, quos.</p>
                         <button className="btn btn-outline-success">Read More</button>
 

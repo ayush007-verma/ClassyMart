@@ -136,7 +136,7 @@ app.get("/getaddress/:userid", (req, res) => {
 
 app.get("/account/:id", (req, res) => {
     const id = req.params.id;
-    let sqll = `select * from orders where userid=${id} && orderstatus='order done'`;
+    let sqll = `select * from orders where user_id=${id} && order_status='order done'`;
     db.query(sqll, (err, result) => {
         if (err) {
             console.log(err)
@@ -181,89 +181,71 @@ app.post("/addaddress", (req, res) => {
 
 })
 
+/* Razor Pay Payment*/
+
+const Razorpay = require('razorpay')
+
+
+var instance = new Razorpay({ key_id: 'rzp_test_LpDSKdGaX4REP5', key_secret: 'biJs7WotcLKxYRLTcAk9N1gH' })
+
+
+// app.post("/orders", (req, res) => {
+//     try {
+//         const paymentResponse = instance.orders.create({
+//             amount: 1000000,
+//             currency: "INR",
+//             receipt: "Receipt no. 1",
+//             notes: {
+//               notes_key_1: "Tea, Earl Grey, Hot",
+//               notes_key_2: "Tea, Earl Grey… decaf",
+//             }
+//         })
+//         res.status(200).json({ msg: "paymentSuccess", response: paymentResponse })
+//     } catch(err) {
+//         res.status(500).json({error : err, msg : "error in payments"})
+//     }
+// })
+
+// app.get('/orders', async (req, res) => {
+//     try {
+//         const response = await instance.orders.all(option)
+//         res.status(200).json({ msg: "getOrders", response: response })
+
+//     } catch (error) {
+//         res.status(500).json({error : error, msg : "error in payments"})
+//     }
+// })
+
 app.post("/buynow", (req, res) => {
-    // const data={
-    //     userid:req.body.userid,
-    //     totalprice:req.body.totalprice,
-    //     orderstatus:req.body.orderstatus,
-    //     paymentmode:req.body.paymentmode,
+    /*
+     userid: dat,
+            totalprice: total,
+            // orderstatus:"order Not Done",
+            paymentmode: payment,
+            paymentemail: datemail,
+            name: datname,
+            cart: cart
+         */
 
-
-    // }
-
-
-    console.log(req)
-    const cartdata = req.body.cart
-    const paymentemail = req.body.paymentemail
-    const name = req.body.name;
-    var insta = new Insta.PaymentData();
-
-    const REDIRECT_URL = "http://localhost:3000/success";
-
-    insta.setRedirectUrl(REDIRECT_URL);
-    insta.send_email = "True";
-    insta.send_sms = "False";
-    insta.purpose = "React Ecom"; // REQUIRED
-    insta.amount = req.body.totalprice;
-    insta.name = name;
-    insta.email = paymentemail; // REQUIRED
-
-    // console.log(paymentemail+ name)
-
-    Insta.createPayment(insta, function (error, response) {
-        if (error) {
-            console.log("something went wrong")
-        } else {
-              console.log("response is : ", response)
-            const responseData = JSON.parse(response);
-            console.log('responseData : ', responseData)
-            console.log('!@#$$#', responseData.payment_request)
-            const redirectUrl = responseData.payment_request.longurl;
-            // console.log(redirectUrl)
-            //   open(response.payment_request.longurl);
-            const data = {
-                userid: req.body.userid,
-                totalprice: req.body.totalprice,
-                orderstatus: responseData.payment_request.status,
-                paymentmode: req.body.paymentmode,
-                paymentid: responseData.payment_request.id
+    const {name, totalprice ,paymentemail }= req.body;
+    console.log("name" , name)
+    console.log("totalprice" , totalprice)
+    console.log("paymentemail" , paymentemail)
+    
+    try {
+        const paymentResponse = instance.orders.create({
+            amount: totalprice,
+            currency: "INR",
+            receipt: "Receipt no. 1",
+            notes: {
+                notes_key_1: name,
+                notes_key_2: paymentemail,
             }
-            let sql = "INSERT INTO `orders` SET ?";
-            db.query(sql, data, (err, result) => {
-                if (err) {
-                    // console.log("hi1")
-                    console.log('err here in db query')
-                    console.log(err)
-                }
-                else {
-                    //    console.log(result.insertId)
-                    for (let i = 0; i < cartdata.length; i++) {
-                        // console.log(cartdata[i].name)
-                        const detailsdata = {
-                            orderid: result.insertId,
-                            productid: cartdata[i].id,
-                            productqty: cartdata[i].qty,
-                            productprice: cartdata[i].price
-                        }
-
-                        let sqll = "INSERT INTO `orderitems` SET ?";
-                        db.query(sqll, detailsdata, (er, resu) => {
-                            if (er) {
-                                //  console.log("hi2")
-                                console.log(er)
-                            }
-                        })
-                    }
-                    //  open.open(redirectUrl)
-                    res.send(response)
-
-                }
-            })
-            //   res.send(response)
-            // res.send({msg:"pay done"})
-        }
-    });
-    // console.log(data)
+        })
+        res.status(200).json({ msg: "paymentSuccess", response: paymentResponse })
+    } catch (err) {
+        res.status(500).json({ error: err, msg: "error in payments" })
+    }
 })
 
 app.post("/paydetails", (req, res) => {
@@ -476,3 +458,30 @@ app.post('/addProductsApi', (req, res) => {
 }
  * 
  */
+
+const productsList = require('./Constants/data')
+
+app.get('/products', (req, res) => {
+    res.status(200).json({ msg: "success", products: productsList })
+})
+
+
+
+/* razor pay  */
+
+
+// var instance = new Razorpay({
+//     key_id: 'rzp_test_LpDSKdGaX4REP5',
+//     key_secret: 'biJs7WotcLKxYRLTcAk9N1gH',
+// });
+
+// instance.payments.fetch(paymentId)
+
+// instance.payments.all({
+//     from: '2016-08-01',
+//     to: '2016-08-20'
+// }).then((response) => {
+//     // handle success
+// }).catch((error) => {
+//     // handle error
+// })
