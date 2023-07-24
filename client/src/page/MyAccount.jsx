@@ -68,7 +68,7 @@ const MyAccount = () => {
                     <button className="btn btn-warning ml-1 mr-1" onClick={logout}>LogOut</button>
                     <br /><br />
 
-               <h2>You Not Yet Placed Any Order</h2>
+               <h2>You have Not Yet Placed Any Order</h2>
                <button className="btn btn-info" onClick={()=>his.push('/products')}>Continue Shopping</button>
             </div>
 

@@ -4,6 +4,7 @@ import { DataContext } from '../context/DataContext'
 import axios from 'axios'
 import { paymentSuccess } from '../component/Toastify'
 import { ToastContainer } from 'react-toastify'
+import PaymentForm from '../Payment/PaymentForm'
 const Payment = () => {
     const his = useHistory()
     const datemail = localStorage.getItem('EcomEmail')
@@ -14,6 +15,7 @@ const Payment = () => {
     const [yourAddress, setYourAddress] = useState([])
     const [inputAddres, setInputAddres] = useState("")
     const [showaddress, setShowaddress] = useState(false)
+    const [showPayment, setShowPayment] = useState(false)
     const [payment, setPayment] = useState("")
     const [UserId, setUserId] = useState("")
 
@@ -71,6 +73,7 @@ const Payment = () => {
 
         const res = await axios.get(`http://localhost:8000/getaddress/${dat}`)
         //   
+        // console.log(res)
         setYourAddress(res.data)
 
     }
@@ -110,39 +113,41 @@ const Payment = () => {
 
     const OnBuyNow = async (e) => {
         e.preventDefault()
+
+        setShowPayment(true)
         //  console.log(inputAddres + payment)
-        const dat = localStorage.getItem('EcomUserId')
-        const datemail = localStorage.getItem('EcomEmail')
-        const datname = localStorage.getItem('EcomUser')
-        localStorage.setItem('Ecompaymentmode', payment)
+        // const dat = localStorage.getItem('EcomUserId')
+        // const datemail = localStorage.getItem('EcomEmail')
+        // const datname = localStorage.getItem('EcomUser')
+        // localStorage.setItem('Ecompaymentmode', payment)
 
 
-        const data = {
-            userid: dat,
-            totalprice: total,
-            // orderstatus:"order Not Done",
-            paymentmode: payment,
-            paymentemail: datemail,
-            name: datname,
-            cart: cart
-        }
+        // const data = {
+        //     userid: dat,
+        //     totalprice: total,
+        //     orderstatus: "order Not Done",
+        //     paymentmode: payment,
+        //     paymentemail: datemail,
+        //     name: datname,
+        //     cart: cart
+        // }
 
-        console.log('buy now req data :- ', data)
+        // console.log('buy now req data :- ', data)
         // console.log(data)
-        try {
-            const res = await axios.post(`http://localhost:8000/buynow`, data)
-            console.log("payment : ", res)
-            // setCart([])
+        // try {
+        //     const res = await axios.post(`http://localhost:8000/buynow`, data)
+        //     console.log("payment : ", res)
+        //     // setCart([])
 
-            setTimeout(() => {
-                paymentSuccess()
-                setCart([])
-                his.push('/home')
-            }, 2000);
-        } catch (err) {
-            console.log("order not placed", err)
-        }
-        paymentSuccess()
+            // setTimeout(() => {
+            //     paymentSuccess()
+            //     // setCart([])
+            //     // his.push('/home')
+            // }, 2000);
+        // } catch (err) {
+        //     console.log("order not placed", err)
+        // }
+        // paymentSuccess()
 
 
     }
@@ -276,62 +281,71 @@ const Payment = () => {
                             <div className="card">
                                 <h3>Add Recived Address</h3>
                                 <br />
-                                {
-                                    yourAddress.length ? (
-                                        <>
-                                            <form onSubmit={OnBuyNow} >
+                                <>
+                                    <button className="btn btn-info" onClick={() => setShowaddress(true)} style={{ marginBottom: "2px" }}>Add Address</button>
 
-                                                {
-                                                    yourAddress.map((val, ind) => {
-                                                        return (
-                                                            <>
-                                                                <button type="button" className="btn btn-info" onClick={() => his.push(`/edit_address/${UserId}`)}>Edit Address</button>
-                                                                <div class="form-check ">
-                                                                    <label class="form-check-label p-1 mb-2">
-                                                                        <input type="radio" class="form-check-input" name="gender" value={val.id} onChange={(e) => setInputAddres(e.target.value)} required />
-                                                                        {val.name}<br /> {val.email} <br /> {val.phone} <br /> {val.address}
-                                                                    </label>
-                                                                </div>
-                                                            </>
-                                                        )
-                                                    })
-                                                }
+                                    <form onSubmit={OnBuyNow} >
 
-
-
-
-
-                                                <h4>Choose payment option</h4>
-
-                                                {/* <div class="form-check-inline">
-                               <label class="form-check-label">
-                                   <input type="radio" class="form-check-input" name="payment" value="cod" onChange={(e)=>setPayment(e.target.value)}  required/>Cod
-                               </label>
-                           </div> */}
-                                                <div class="form-check-inline">
-                                                    <label class="form-check-label">
-                                                        <input type="radio" class="form-check-input" name="payment" value="online" onChange={(e) => setPayment(e.target.value)} required />Online
-                                                    </label>
-                                                </div>
-
-
-                                                <div class="text-center m-3">
-                                                    <input type="submit" class="btn btn-info pt-2 pb-2 pl-5 pr-5" value="Buy Now" />
-                                                    {
-                                                        <ToastContainer />
-                                                    }
-                                                </div>
+                                        {
+                                            yourAddress.map((val, ind) => {
+                                                return (
+                                                    <>
+                                                        <button type="button" className="btn btn-info" onClick={() => his.push(`/edit_address/${UserId}`)}>Edit Address</button>
+                                                        <div class="form-check ">
+                                                            <label class="form-check-label p-1 mb-2">
+                                                                <input type="radio" class="form-check-input" name="gender" value={val.id} onChange={(e) => setInputAddres(e.target.value)} required />
+                                                                {val.name}<br /> {val.email} <br /> {val.phone} <br /> {val.address}
+                                                            </label>
+                                                        </div>
+                                                    </>
+                                                )
+                                            })
+                                        }
 
 
 
 
-                                            </form>
 
-                                        </>
-                                    ) :
-                                        <button className="btn btn-info" onClick={() => setShowaddress(true)}>Add Address</button>
-                                }
+                                        <h4>Choose payment option</h4>
 
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="payment" value="cod" onChange={(e) => setPayment(e.target.value)} required />Cod
+                                            </label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="payment" value="online" onChange={(e) => setPayment(e.target.value)} required />Online
+                                            </label>
+                                        </div>
+
+
+                                        <div class="text-center m-3">
+
+
+                                            <input type="submit" class="btn btn-info pt-2 pb-2 pl-5 pr-5" value="Buy Now" />
+                                            {
+                                                <ToastContainer />
+                                            }
+                                        </div>
+
+
+
+
+                                    </form>
+
+                                </>
+
+
+                            </div>
+                        </div>
+                        <div className="col-md-6 col-12 mx-auto mb-3">
+                            <div className='card'> 
+                            {
+                                showPayment && (
+                                    <PaymentForm />
+                                )
+                            }
                             </div>
                         </div>
                     </div>

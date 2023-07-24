@@ -6,14 +6,14 @@ const GridWrapper = styled(Grid)`
     justify-content : space-between;
 `
 
-const Image = styled('img')(({theme})=> ({
-    marginTop : 10,
-    width : '100%',
-    display : 'flex',
-    justifyContent : 'space-between',
-    [theme.breakpoints.down('md')] : {
-        objectFit : 'cover',
-        height : 120
+const Image = styled('img')(({ theme }) => ({
+    marginTop: 10,
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    [theme.breakpoints.down('md')]: {
+        objectFit: 'cover',
+        height: 120
     }
 }))
 
@@ -22,7 +22,7 @@ const MidSection = () => {
     return (
         <>
             {/* <Box style={{ display: 'flex' }}> */}
-            <GridWrapper lg={12} sm={12} md={12} xs={12} container>
+            {/* <GridWrapper lg={12} sm={12} md={12} xs={12} container>
                 {
                     imageURL.map((image, key) => (
                         <Grid item lg={4} md={4} sm={12} xs={12}>
@@ -30,6 +30,13 @@ const MidSection = () => {
                         </Grid>
                     ))
                 }
+            </GridWrapper> */}
+            <GridWrapper container>
+                {imageURL.map((image, key) => (
+                    <Grid key={key} item lg={4} md={4} sm={12} xs={12}>
+                        <img src={image} alt={`image - ${key}`} style={{ width: '100%' }} />
+                    </Grid>
+                ))}
             </GridWrapper>
             <Image src={imageUrl} alt="image" />
             {/* </Box> */}

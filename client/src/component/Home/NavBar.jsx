@@ -1,6 +1,7 @@
 import { AddBox } from '@mui/icons-material'
 import { Box, styled, Typography } from '@mui/material'
 import { navData } from '../../Constants/data'
+import { NavLink } from 'react-router-dom/cjs/react-router-dom.min'
 
 const NavWrapper = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -28,9 +29,11 @@ const NavBar = () => {
         <NavWrapper>
             {
                 navData.map((data, idx) => (
-                    <NavContainer key={idx}>
-                        <img src={data.url} alt="nav" style={{ width: 64 }} />
-                        <Typography>{data.text}</Typography>
+                    <NavContainer key={idx} >
+                        <NavLink to="/Products" style={{textDecoration: 'none'}}>
+                            <img src={data.url} alt="nav" style={{ width: 64 }} />
+                            <Typography>{data.text}</Typography>
+                        </NavLink>
                     </NavContainer>
                 ))
             }

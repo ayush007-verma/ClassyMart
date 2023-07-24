@@ -25,10 +25,8 @@ export const ConText=(props)=>{
     
      useEffect(()=>{
           checkAuth()
-        
-    
      },[])
-     setInterval(checkAuth, 1000);
+    //  setInterval(checkAuth, 1000);
 
     return(
         <>

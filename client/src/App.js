@@ -18,13 +18,17 @@ import Login from './page/Login'
 import Success from './page/Success'
 import PayNow from './page/PayNow'
 
+import { Provider } from 'react-redux'
+
 import './App.css'
+import store from './redux/store'
+import PaymentForm from './Payment/PaymentForm'
 
 
 const App = () => {
   return (
     <>
-      <ConText>
+      <Provider store={store}><ConText>
         <BrowserRouter>
           <Navbar />
           <Switch>
@@ -43,7 +47,8 @@ const App = () => {
             <Route exact path="/paynow/:pid" component={PayNow} />
           </Switch>
         </BrowserRouter>
-      </ConText>
+      </ConText></Provider>
+      {/* <PaymentForm/> */}
     </>
   )
 }

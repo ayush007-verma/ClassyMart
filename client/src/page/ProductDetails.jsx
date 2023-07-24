@@ -62,6 +62,7 @@ const ProductDetails = () => {
             setCart([...cart, data])
         }
         console.log(cart)
+        his.push('/cart')
     }
 
     const getData = async () => {

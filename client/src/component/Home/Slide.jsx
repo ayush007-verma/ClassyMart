@@ -2,7 +2,7 @@ import Carousel from "react-multi-carousel"
 import 'react-multi-carousel/lib/styles.css';
 import Countdown from 'react-countdown'
 import { Box, Typography, Button, Divider, styled } from "@mui/material";
-
+import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
@@ -67,7 +67,7 @@ const Slide = ({ products, title, timer }) => {
     return <Box variant="span"> {hours} : {minutes} : {seconds} Left</Box>
   }
   return (
-    <Component>
+    <Component style={{cursor : "pointer"}}>
       <Deal>
         <DealText>
           {title}
@@ -79,7 +79,11 @@ const Slide = ({ products, title, timer }) => {
             <Countdown date={Date.now() + 5.04e+7} renderer={renderer} />
           </Timer>
         }
-        <ViewAllButton variant="contained" color="primary">VIEW AL</ViewAllButton>
+        <ViewAllButton variant="contained" color="primary">
+          <NavLink to="/Products" style={{textDecoration: 'none', color : "white"}}>
+            VIEW ALL
+          </NavLink>
+        </ViewAllButton>
       </Deal>
       <Divider />
       <Carousel
@@ -98,8 +102,10 @@ const Slide = ({ products, title, timer }) => {
       >
         {(products.map(
           (product, id) => (
-            <Box textAlign="center" style={{ padding: "25px 15px" }}>
+            <Box key={id} textAlign="center" style={{ padding: "25px 15px" }}>
+              <NavLink to="/Products">
               <Image src={product.url} alt={`product - ${id}`} />
+              </NavLink>
               <Text style={{ fontWeight: 600, color: '#212121' }}>{product.title.shortTitle}</Text>
               <Text style={{ color: 'green' }}>{product.discount}</Text>
               <Text style={{ color: '#212121', opacity: ".6" }}>{product.tagline}</Text>

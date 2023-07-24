@@ -3,19 +3,10 @@ const mysql = require("mysql");
 const cors = require("cors");
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
-const Insta = require("instamojo-nodejs");
-const url = require('url');
 const open = require('openurl');
 const saltRounds = 10;
 const PORT = process.env.PORT || 8000;
 
-const API_KEY = "test_******";
-const AUTH_KEY = "test_*****";
-
-
-Insta.setKeys(API_KEY, AUTH_KEY);
-
-Insta.isSandboxMode(true);
 
 const app = express()
 
@@ -148,6 +139,18 @@ app.get("/account/:id", (req, res) => {
     })
 
 })
+
+app.post("/saveorder", (req, res) => {
+    const {
+        cart,
+        amount,
+        id,
+        created_at
+    } = req.body;
+
+    let sqlinsert = 'INSERT INTO '
+})
+
 app.get("/myorder/:id", (req, res) => {
     const id = req.params.id;
     // let sqll=`select * from orderitems where orderid=${id}`;
@@ -166,7 +169,7 @@ app.get("/myorder/:id", (req, res) => {
 // post details 
 
 app.post("/addaddress", (req, res) => {
-
+    console.log(req.body)
     const sqlInsert = "INSERT INTO user_data (  name, email, phone, address, user_id)"
     const values = `VALUES ("${req.body.name}", "${req.body.email}", ${req.body.phone}, "${req.body.address}", ${req.body.user_id});`
 
@@ -186,8 +189,9 @@ app.post("/addaddress", (req, res) => {
 const Razorpay = require('razorpay')
 
 
-var instance = new Razorpay({ key_id: 'rzp_test_LpDSKdGaX4REP5', key_secret: 'biJs7WotcLKxYRLTcAk9N1gH' })
-
+var instance = new Razorpay({ key_id: 'rzp_test_cRKMALlwldZBvI', key_secret: 'IaQKhTtFeLNYyPe7bI4VGGBD' })
+// IaQKhTtFeLNYyPe7bI4VGGBD
+// rzp_test_cRKMALlwldZBvI
 
 // app.post("/orders", (req, res) => {
 //     try {
@@ -216,30 +220,32 @@ var instance = new Razorpay({ key_id: 'rzp_test_LpDSKdGaX4REP5', key_secret: 'bi
 //     }
 // })
 
-app.post("/buynow", (req, res) => {
+app.post("/buynow", async (req, res) => {
     /*
      userid: dat,
             totalprice: total,
-            // orderstatus:"order Not Done",
+            orderstatus:"order Not Done",
             paymentmode: payment,
             paymentemail: datemail,
             name: datname,
             cart: cart
          */
 
-    const {name, totalprice ,paymentemail }= req.body;
-    console.log("name" , name)
-    console.log("totalprice" , totalprice)
-    console.log("paymentemail" , paymentemail)
-    
+    console.log(req.body)
+
+    const { name, totalprice, paymentemail } = req.body;
+    // console.log("name", name)
+    // console.log("totalprice", totalprice)
+    // console.log("paymentemail", paymentemail)
+
     try {
-        const paymentResponse = instance.orders.create({
+        const paymentResponse = await instance.orders.create({
             amount: totalprice,
             currency: "INR",
-            receipt: "Receipt no. 1",
+            receipt: "paymentReceipt",
             notes: {
-                notes_key_1: name,
-                notes_key_2: paymentemail,
+                key1: name,
+                key2: paymentemail
             }
         })
         res.status(200).json({ msg: "paymentSuccess", response: paymentResponse })

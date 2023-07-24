@@ -6,9 +6,9 @@ import MidSection from './MidSection'
 
 
 import { Box, styled } from '@mui/material'
-// import { useEffect } from 'react'
-// import { getProducts } from '../../redux/actions/productAction'
-// import { useDispatch, useSelector } from 'react-redux'
+
+import { getProducts } from '../../redux/actions/productAction'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { useEffect } from 'react'
 import Products from '../../Constants/data copy'
@@ -19,39 +19,28 @@ const Component = styled(Box)`
 `
 const Home = () => {
   // const { products } = useSelector(state => state.getProducts)
-  // console.log(products)
+  // console.log("products1 : ", products)
   // const dispatch = useDispatch()
   // useEffect(() => {
   //   dispatch(getProducts())
   // }, [dispatch])
-  // let products = []
-  // const getProducts = async () => {
-  //   try {
-  //     products = await axios.get('http://localhost:8000/products')
-  //   } catch(er) {
-  //     console.log("error : ",er)
-  //   } 
-  // }
-  let products = Products
-  // useEffect(()=>{
-  //   getProducts()
-  //   console.log("products in home : ",products)
-    
-  // },[])
+  
+  let products1 = Products
+
   return (
     <>
       <NavBar />
 
       <Component>
         <Banner />
-        <MidSlide products={products} title="Deal of the Day" timer={true} />
+        <MidSlide products={products1} title="Deal of the Day" timer={true} />
         <MidSection />
-        <Slide products={products} title="Top Selection" timer={false} />
-        <Slide products={products} title="Season's Top Picks" timer={false} />
-        <Slide products={products} title="Discounts For You" timer={false} />
-        <Slide products={products} title="Trending Offers" timer={false} />
-        <Slide products={products} title="Recommended Items" timer={false} />
-        <Slide products={products} title="Top Deals on Apparels" timer={false} />
+        <Slide products={products1} title="Top Selection" timer={false} />
+        <Slide products={products1} title="Season's Top Picks" timer={false} />
+        <Slide products={products1} title="Discounts For You" timer={false} />
+        <Slide products={products1} title="Trending Offers" timer={false} />
+        <Slide products={products1} title="Recommended Items" timer={false} />
+        <Slide products={products1} title="Top Deals on Apparels" timer={false} />
       </Component>
     </>
   )
